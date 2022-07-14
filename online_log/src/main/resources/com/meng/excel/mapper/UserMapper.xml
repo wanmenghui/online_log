@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meng.excel.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.meng.excel.dao.User">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"></result>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"></result>
+        <result column="user_account" jdbcType="VARCHAR" property="userAccount"></result>
+        <result column="password" jdbcType="VARCHAR" property="password"></result>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"></result>
+        <result column="email" jdbcType="VARCHAR" property="email"></result>
+        <result column="sex" jdbcType="VARCHAR" property="sex"></result>
+        <result column="is_delete" jdbcType="VARCHAR" property="isDelete"></result>
+        <result column="create_time" jdbcType="VARCHAR" property="createTime"></result>
+        <result column="update_time" jdbcType="VARCHAR" property="updateTime"></result>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, user_id, user_name, user_account, password, mobile, email, sex, is_delete, create_time, update_time
+    </sql>
+
+    <select id="test" resultType="java.lang.Integer">
+        select count(*) from user_info
+    </select>
+
+    <insert id="insert">
+        insert into user_info
+        ( id, user_id, user_name, user_account, password, mobile, email, sex, is_delete, create_time, update_time )
+        values
+        (
+            #{user.id,jdbcType=INTEGER}, #{user.userId,jdbcType=VARCHAR}, #{user.userName,jdbcType=VARCHAR},
+            #{user.userAccount,jdbcType=VARCHAR}, #{user.password,jdbcType=VARCHAR}, #{user.mobile,jdbcType=VARCHAR},
+            #{user.email,jdbcType=VARCHAR}, #{user.sex,jdbcType=VARCHAR}, 0, NOW(), NOW()
+        )
+    </insert>
+
+    <update id="delete">
+        update user_info set is_delete = 1 where id = #{id}
+    </update>
+
+    <update id="update">
+        update user_info set
+            user_name = #{user.userName}, user_account = #{user.userAccount}, password = #{user.password},
+            mobile = #{user.mobile}, email = #{user.email}
+        where id = #{user.id}
+    </update>
+
+    <select id="querySingle" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from user_info
+        where id = #{id}
+    </select>
+
+    <select id="queryMuch" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from user_info
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meng.excel.mapper.LogMapper">
+
+    <resultMap id="BaseResultMap" type="com.meng.excel.dao.Log">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"></result>
+        <result column="stack" jdbcType="VARCHAR" property="stack"></result>
+        <result column="sql_content" jdbcType="VARCHAR" property="sqlContent"></result>
+        <result column="result_number" jdbcType="VARCHAR" property="resultNumber"></result>
+        <result column="is_used" jdbcType="VARCHAR" property="isUsed"></result>
+        <result column="execute_time" jdbcType="VARCHAR" property="executeTime"></result>
+        <result column="log_type" jdbcType="INTEGER" property="logType"></result>
+        <result column="origin_exception" jdbcType="VARCHAR" property="originException"></result>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, user_id, stack, sql_content, result_number, is_used, execute_time, log_type, origin_exception
+    </sql>
+
+
+    <insert id="insert">
+        insert into log_info
+        (id, user_id, stack, sql_content, result_number, is_used, execute_time, log_type, origin_exception)
+        values
+        (
+            #{log.id,jdbcType=INTEGER}, #{log.userId,jdbcType=VARCHAR}, #{log.stack,jdbcType=VARCHAR},
+            #{log.sqlContent,jdbcType=VARCHAR}, #{log.resultNumber,jdbcType=INTEGER}, 0, NOW(), #{log.logType,jdbcType=INTEGER},
+            #{log.originException,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="query" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from log_info
+        where
+            is_used = 0
+            and execute_time between #{beginTime} and #{endTime}
+            and user_id = #{userId}
+    </select>
+
+    <update id="update">
+        update log_info set is_used = 1
+        where
+            is_used = 0
+            and execute_time between #{beginTime} and #{endTime}
+            and user_id = #{userId}
+    </update>
+</mapper>
