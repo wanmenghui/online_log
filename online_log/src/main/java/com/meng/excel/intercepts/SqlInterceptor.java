@@ -77,7 +77,7 @@ public class SqlInterceptor implements Interceptor {
                 }
             }
         }
-
+        // 分布式的话可以用redis存标记
         HttpSession session = httpServletRequest.getSession();
         Boolean logFlag = (Boolean)session.getAttribute(LogConst.SESSION_LOG_FLAG);
         if (logFlag == null || !logFlag) {
