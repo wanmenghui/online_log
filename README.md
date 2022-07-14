@@ -1,5 +1,5 @@
-# online_log
-在线录制操作日志
+# online_log（demo）
+在线录制操作日志（此demo主要为各位提供一个思路）
 
 描述：
 
