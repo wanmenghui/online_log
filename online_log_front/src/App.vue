@@ -1,6 +1,6 @@
 <template>
   <div id="app" :style="attribute">
-   
+
     <!-- 日志demo代码begin -->
     <el-button type="primary" @click="queryMuch">查询</el-button>
 
@@ -25,11 +25,15 @@
       <el-table-column
         prop="sqlContent"
         label="sql信息"
-        width="1200">
+        width="1100">
       </el-table-column>
       <el-table-column
         prop="resultNumber"
         label="结果集">
+      </el-table-column>
+      <el-table-column
+        prop="timeCount"
+        label="耗时">
       </el-table-column>
     </el-table>
 
@@ -155,7 +159,8 @@ export default {
                 let obj2 = {
                   id: tempData[j].id,
                   sqlContent: tempData[j].sqlContent,
-                  resultNumber: tempData[j].resultNumber
+                  resultNumber: tempData[j].resultNumber,
+                  timeCount: tempData[j].timeCount
                 };
                 _this.sqlTableData.push(obj2);
               }
@@ -194,6 +199,13 @@ export default {
     margin: 0;
     padding: 0;
     width: 100%;
+
     background-image: '../public/bg.jpg' !important;
+  }
+  /deep/ .cell {
+    height: 100%;
+  }
+  .test {
+    height: 100% !important
   }
 </style>
