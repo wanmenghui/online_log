@@ -23,5 +23,6 @@ public class Log {
     private LocalDateTime executeTime;
     private Integer logType;
     private String originException;
+    private String timeCount;
 
 }

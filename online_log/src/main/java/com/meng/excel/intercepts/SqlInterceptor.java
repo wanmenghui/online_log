@@ -18,6 +18,7 @@ import org.apache.ibatis.plugin.Intercepts;
 import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
@@ -77,7 +78,7 @@ public class SqlInterceptor implements Interceptor {
                 }
             }
         }
-        // 分布式的话可以用redis存标记
+
         HttpSession session = httpServletRequest.getSession();
         Boolean logFlag = (Boolean)session.getAttribute(LogConst.SESSION_LOG_FLAG);
         if (logFlag == null || !logFlag) {
@@ -117,6 +118,11 @@ public class SqlInterceptor implements Interceptor {
 
         } catch (Exception e) {
         }
+        long startTime = System.currentTimeMillis();
+        // 执行完上面的任务后，不改变原有的sql执行过程
+        Object result = invocation.proceed();
+        long endTime = System.currentTimeMillis();
+        String timeCount = (endTime - startTime) + " ms";
         if (StringUtils.isNotBlank(sql)) {
             // 记录日志信息
             Log log = new Log();
@@ -125,13 +131,11 @@ public class SqlInterceptor implements Interceptor {
             log.setUserId("abc111");
             log.setSqlContent(sql);
             log.setResultNumber(num);
-
+            log.setTimeCount(timeCount);
             logService.insert(log);
         }
 
-        // 执行完上面的任务后，不改变原有的sql执行过程
-        return invocation.proceed();
-
+        return result;
     }
 
     @Override
@@ -145,7 +149,7 @@ public class SqlInterceptor implements Interceptor {
     }
 
 
-    public static String showSql(Configuration configuration, BoundSql boundSql) {
+    private static String showSql(Configuration configuration, BoundSql boundSql) {
         // 获取参数
         Object parameterObject = boundSql.getParameterObject();
         List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
