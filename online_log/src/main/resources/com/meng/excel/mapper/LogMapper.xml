@@ -13,21 +13,22 @@
         <result column="execute_time" jdbcType="VARCHAR" property="executeTime"></result>
         <result column="log_type" jdbcType="INTEGER" property="logType"></result>
         <result column="origin_exception" jdbcType="VARCHAR" property="originException"></result>
+        <result column="time_count" jdbcType="VARCHAR" property="timeCount"></result>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, user_id, stack, sql_content, result_number, is_used, execute_time, log_type, origin_exception
+        id, user_id, stack, sql_content, result_number, is_used, execute_time, log_type, origin_exception, time_count
     </sql>
 
 
     <insert id="insert">
         insert into log_info
-        (id, user_id, stack, sql_content, result_number, is_used, execute_time, log_type, origin_exception)
+        (id, user_id, stack, sql_content, result_number, is_used, execute_time, log_type, origin_exception, time_count)
         values
         (
             #{log.id,jdbcType=INTEGER}, #{log.userId,jdbcType=VARCHAR}, #{log.stack,jdbcType=VARCHAR},
             #{log.sqlContent,jdbcType=VARCHAR}, #{log.resultNumber,jdbcType=INTEGER}, 0, NOW(), #{log.logType,jdbcType=INTEGER},
-            #{log.originException,jdbcType=VARCHAR}
+            #{log.originException,jdbcType=VARCHAR}, #{log.timeCount,jdbcType=VARCHAR}
         )
     </insert>
 

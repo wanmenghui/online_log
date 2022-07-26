@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author menghui.wan
@@ -66,6 +67,13 @@ public class UserController {
         ids.add(2);
         ids.add(3);
         List<User> users = userService.queryMuch(ids);
+        userService.delete(6);
+        for (int i = 0; i < 5; i++) {
+            Random random = new Random();
+            int index = random.nextInt(4) + 1;
+            User user = userService.querySingle(7);
+            userService.update(user);
+        }
         int a = 1/0;
         return users;
     }
