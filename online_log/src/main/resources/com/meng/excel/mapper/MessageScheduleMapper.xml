@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.meng.excel.mapper.MessageScheduleMapper">
+
+    <resultMap id="BaseResultMap" type="com.meng.excel.dao.MessageSchedule">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="cronExpression" column="cron_expression" jdbcType="VARCHAR"/>
+        <result property="expirationTime" column="expiration_time" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, user_id, user_name, cron_expression, expiration_time, is_delete, create_time
+    </sql>
+
+
+    <insert id="insert">
+        insert into message_schedule (id, user_id, user_name, crom_expression, expiration_time, is_delete, create_time)
+        values (#{messageSchedule.id}, #{messageSchedule.userId}, #{messageSchedule.userName}, #{messageSchedule.cronExpression},
+        #{messageSchedule.expirationTime}, 0, NOW())
+    </insert>
+
+    <select id="query" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"/>
+        from message_schedule
+        where
+            is_delete = 0
+    </select>
+
+</mapper>
