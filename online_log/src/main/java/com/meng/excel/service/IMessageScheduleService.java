@@ -14,4 +14,6 @@ public interface IMessageScheduleService {
 
     List<MessageSchedule> query();
 
+    MessageSchedule queryById(Integer id);
+
 }

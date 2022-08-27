@@ -25,4 +25,9 @@ public class MessageScheduleServiceImpl implements IMessageScheduleService{
     public List<MessageSchedule> query() {
         return messageScheduleMapper.query();
     }
+
+    @Override
+    public MessageSchedule queryById(Integer id) {
+        return messageScheduleMapper.queryById(id);
+    }
 }
