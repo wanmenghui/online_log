@@ -45,6 +45,9 @@ public class MessageScheduleController {
                 System.out.println("success");
             }
         });
+        // 支持秒级别定时任务
+        CronUtil.setMatchSecond(true);
+        CronUtil.start();
         return "success add";
     }
 
