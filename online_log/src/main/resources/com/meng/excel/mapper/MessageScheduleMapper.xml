@@ -7,6 +7,8 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result property="userId" column="user_id" jdbcType="INTEGER"/>
         <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="pushKey" column="push_key" jdbcType="VARCHAR"/>
+        <result property="messageContent" column="message_content" jdbcType="VARCHAR"/>
         <result property="cronExpression" column="cron_expression" jdbcType="VARCHAR"/>
         <result property="expirationTime" column="expiration_time" jdbcType="TIMESTAMP"/>
         <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
@@ -14,14 +16,14 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, user_id, user_name, cron_expression, expiration_time, is_delete, create_time
+        id, user_id, user_name,push_key, message_content, cron_expression, expiration_time, is_delete, create_time
     </sql>
 
 
     <insert id="insert">
-        insert into message_schedule (id, user_id, user_name, crom_expression, expiration_time, is_delete, create_time)
-        values (#{messageSchedule.id}, #{messageSchedule.userId}, #{messageSchedule.userName}, #{messageSchedule.cronExpression},
-        #{messageSchedule.expirationTime}, 0, NOW())
+        insert into message_schedule (id, user_id, user_name, push_key, message_content, crom_expression, expiration_time, is_delete, create_time)
+        values (#{messageSchedule.id}, #{messageSchedule.userId}, #{messageSchedule.userName}, #{messageSchedule.pushKey}, #{messageSchedule.messageContent} ,
+                #{messageSchedule.cronExpression}, #{messageSchedule.expirationTime}, 0, NOW())
     </insert>
 
     <select id="query" resultMap="BaseResultMap">
@@ -30,6 +32,15 @@
         from message_schedule
         where
             is_delete = 0
+    </select>
+
+    <select id="queryById" resultType="com.meng.excel.dao.MessageSchedule">
+        select
+            <include refid="Base_Column_List"/>
+        from message_schedule
+        where
+            is_delete = 0
+            and id = #{id}
     </select>
 
 </mapper>

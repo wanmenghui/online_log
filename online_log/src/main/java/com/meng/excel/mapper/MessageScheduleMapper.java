@@ -18,4 +18,6 @@ public interface MessageScheduleMapper {
 
     List<MessageSchedule> query();
 
+    MessageSchedule queryById(@Param("id") Integer id);
+
 }
