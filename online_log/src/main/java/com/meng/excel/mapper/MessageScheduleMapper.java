@@ -20,4 +20,8 @@ public interface MessageScheduleMapper {
 
     MessageSchedule queryById(@Param("id") Integer id);
 
+    MessageSchedule queryByPushKey(@Param("pushKey") String pushKey);
+
+    void updateUserInfoByPushKey(@Param("pushKey") String pushKey, @Param("cronExpression") String cronExpression, @Param("messageContent") String messageContent);
+
 }

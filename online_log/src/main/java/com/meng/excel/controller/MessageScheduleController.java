@@ -5,18 +5,15 @@ import cn.hutool.cron.CronUtil;
 import cn.hutool.cron.pattern.CronPattern;
 import cn.hutool.cron.task.Task;
 import cn.hutool.http.HttpUtil;
-import com.meng.excel.constant.MessageConst;
 import com.meng.excel.dao.MessageSchedule;
 import com.meng.excel.service.IMessageScheduleService;
+import com.meng.excel.vo.MessageScheduleVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.meng.excel.constant.MessageConst.*;
 
@@ -47,7 +44,6 @@ public class MessageScheduleController {
         });
         // 支持秒级别定时任务
         CronUtil.setMatchSecond(true);
-        CronUtil.start();
         return "success add";
     }
 
@@ -83,7 +79,7 @@ public class MessageScheduleController {
     }
 
     @RequestMapping("/remove/{taskId}")
-    public String removeTaSK(@PathVariable String taskId) {
+    public String removeTask(@PathVariable String taskId) {
         CronUtil.remove(taskId);
         return "success remove";
     }
@@ -92,6 +88,40 @@ public class MessageScheduleController {
     public String removeTaskAll() {
         CronUtil.stop();
         return "success remove";
+    }
+
+
+    @RequestMapping("/query/info/{pushKey}")
+    public MessageScheduleVo getUserInfo(@PathVariable String pushKey) {
+        MessageSchedule messageSchedule = messageScheduleService.queryByPushKey(pushKey);
+        MessageScheduleVo result = new MessageScheduleVo();
+        BeanUtils.copyProperties(messageSchedule,result);
+        return result;
+    }
+
+    @PostMapping("/update/info/{pushKey}")
+    public String updateInfo(@PathVariable String pushKey, @RequestBody MessageScheduleVo params) {
+        MessageSchedule messageSchedule = messageScheduleService.queryByPushKey(pushKey);
+        String cronExpression = params.getCronExpression();
+        String messageContent = params.getMessageContent();
+        String taskId = messageSchedule.getUserId();
+        boolean remove = CronUtil.remove(taskId);
+        System.out.println("是否成功移除： " + remove);
+        CronUtil.schedule(taskId,cronExpression, new Task() {
+            @Override
+            public void execute() {
+                Console.log(messageSchedule.getUserName() + "  开始执行～～～～～～");
+                HashMap<String, Object> params = new HashMap<>();
+                params.put(PUSH_KEY,messageSchedule.getPushKey());
+                params.put(TEXT,messageContent);
+                HttpUtil.post(MESSAGE_URL,params);
+                System.out.println("success");
+            }
+        });
+        // 支持秒级别定时任务
+        CronUtil.setMatchSecond(true);
+        messageScheduleService.updateUserInfoByPushKey(pushKey,cronExpression,messageContent);
+        return "update info success";
     }
 
 }

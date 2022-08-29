@@ -43,4 +43,27 @@
             and id = #{id}
     </select>
 
+    <select id="queryByPushKey" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"/>
+        from message_schedule
+        where
+            is_delete = 0
+            and push_key = #{pushKey}
+    </select>
+
+    <update id="updateUserInfoByPushKey">
+        update message_schedule
+        <set>
+            <if test="cronExpression != null and cronExpression != ''">
+                cron_expression = #{cronExpression},
+            </if>
+            <if test="messageContent != null and messageContent != ''">
+                message_content = #{messageContent},
+            </if>
+        </set>
+        where
+        is_delete = 0
+        and push_key = #{pushKey}
+    </update>
 </mapper>

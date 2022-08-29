@@ -16,4 +16,9 @@ public interface IMessageScheduleService {
 
     MessageSchedule queryById(Integer id);
 
+    MessageSchedule queryByPushKey(String pushKey);
+
+    void updateUserInfoByPushKey(String pushKey, String cronExpression, String messageContent);
+
+
 }

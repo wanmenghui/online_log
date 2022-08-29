@@ -30,4 +30,14 @@ public class MessageScheduleServiceImpl implements IMessageScheduleService{
     public MessageSchedule queryById(Integer id) {
         return messageScheduleMapper.queryById(id);
     }
+
+    @Override
+    public MessageSchedule queryByPushKey(String pushKey) {
+        return messageScheduleMapper.queryByPushKey(pushKey);
+    }
+
+    @Override
+    public void updateUserInfoByPushKey(String pushKey, String cronExpression, String messageContent) {
+        messageScheduleMapper.updateUserInfoByPushKey(pushKey, cronExpression, messageContent);
+    }
 }

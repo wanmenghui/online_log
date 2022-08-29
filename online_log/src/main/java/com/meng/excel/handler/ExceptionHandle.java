@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  *
  * @author menghui.wan
  */
-@RestControllerAdvice
+//@RestControllerAdvice
 public class ExceptionHandle {
 
     @Autowired
