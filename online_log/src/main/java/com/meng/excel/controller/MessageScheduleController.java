@@ -1,5 +1,7 @@
 package com.meng.excel.controller;
 
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Console;
 import cn.hutool.cron.CronUtil;
 import cn.hutool.cron.pattern.CronPattern;
@@ -61,7 +63,7 @@ public class MessageScheduleController {
                     params.put(PUSH_KEY,messageSchedule.getPushKey());
                     params.put(TEXT,messageSchedule.getMessageContent());
                     HttpUtil.post(MESSAGE_URL,params);
-                    System.out.println("success");
+                    System.out.println("success： " + DateUtil.now());
                 }
             });
         }
